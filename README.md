@@ -41,3 +41,7 @@ Starting with the code as is, make additions to it to increase its functionality
 [Advanced]
 - Add a chat bot of some kind which can supply stock market news or details, sports headlines, or weather info.
 - Add a way to message images
+
+javac SocketServer.java SocketClient.java
+java SocketServer
+java SocketClient

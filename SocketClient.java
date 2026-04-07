@@ -1,4 +1,3 @@
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -6,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import javax.swing.*;
 
 @SuppressWarnings("serial")
 public class SocketClient extends JFrame implements ActionListener, Runnable {
@@ -27,27 +27,28 @@ public class SocketClient extends JFrame implements ActionListener, Runnable {
         textArea.setForeground(new Color(50, 205, 50));
         textArea.setEditable(false);
         textArea.setFont(new Font("Monospaced", Font.BOLD, 13));
-
         textArea.setBackground(new Color(0, 0, 0));
 
-/*
-         JMenu helpMenu = new JMenu("Help");
+        // --- CHANGED: uncommented the Help menu and wired it to showHelp() ---
+        JMenu helpMenu = new JMenu("Help");
         JMenuItem update = new JMenuItem("Update Information");
         JMenuItem connect_List = new JMenuItem("Visitor List");
 
+        update.addActionListener(e -> showHelp());
+
         helpMenu.add(update);
         helpMenu.add(connect_List);
-
         menuBar.add(helpMenu);
         setJMenuBar(menuBar);
-*/
+        // --- end CHANGED ---
+
         getContentPane().add(jp, "Center");
         input_Text.setText("Enter your Message:");
         input_Text.setToolTipText("Enter your Message");
         input_Text.setForeground(new Color(0, 0, 0));
         input_Text.setFont(new Font("Tahoma", Font.BOLD, 11));
         input_Text.setBackground(new Color(230, 230, 250));
-        
+
         getContentPane().add(input_Text, "South");
         setSize(325, 411);
         setVisible(true);
@@ -57,7 +58,45 @@ public class SocketClient extends JFrame implements ActionListener, Runnable {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         input_Text.addActionListener(this); //Event registration
+
+        // --- ADDED: show help dialog automatically on startup ---
+        showHelp();
+        // --- end ADDED ---
     }
+
+    // --- ADDED: help dialog method ---
+    private void showHelp() {
+        String message =
+            "=== ChitChat - How to Use ===\n\n" +
+            "STARTING UP\n" +
+            "  1. Run SocketServer first.\n" +
+            "  2. Run SocketClient to open this window.\n" +
+            "  3. Enter the server IP when prompted.\n" +
+            "     (Use 127.0.0.1 if server is on this machine)\n" +
+            "  4. Enter a nickname.\n\n" +
+            "CHATTING\n" +
+            "  - Type a message and press Enter to send.\n" +
+            "  - All connected users will see your message.\n\n" +
+            "MULTIPLE USERS\n" +
+            "  - Each person runs SocketClient on their machine.\n" +
+            "  - Everyone connects to the same server IP.\n\n" +
+            "OVER A LAN\n" +
+            "  - Use the server machine's local IP address\n" +
+            "    (e.g. 192.168.1.x) instead of 127.0.0.1.\n";
+
+        JTextArea helpText = new JTextArea(message);
+        helpText.setEditable(false);
+        helpText.setFont(new Font("Monospaced", Font.PLAIN, 12));
+        helpText.setBackground(new Color(240, 240, 240));
+
+        JOptionPane.showMessageDialog(
+            this,
+            new JScrollPane(helpText),
+            "How to Use ChitChat",
+            JOptionPane.INFORMATION_MESSAGE
+        );
+    }
+    // --- end ADDED ---
 
     public void serverConnection() {
         try {
@@ -65,10 +104,7 @@ public class SocketClient extends JFrame implements ActionListener, Runnable {
             sk = new Socket(IP, 1234);
 
             String name = JOptionPane.showInputDialog(this, "Please enter a nickname", JOptionPane.INFORMATION_MESSAGE);
-/*            while (name.length() > 7) {
-                name = JOptionPane.showInputDialog(this, "Please enter a nickname.(7 characters or less)", JOptionPane.INFORMATION_MESSAGE);
-            }
-*/
+
             //read
             br = new BufferedReader(new InputStreamReader(sk.getInputStream()));
 
