@@ -45,3 +45,6 @@ Starting with the code as is, make additions to it to increase its functionality
 javac SocketServer.java SocketClient.java
 java SocketServer
 java SocketClient
+/ - /bot weather [city]
+  - /bot stock [TICKER]
+  - /bot sports
